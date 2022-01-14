@@ -1,6 +1,13 @@
 version: '2'
 
 services:
+  postgres:
+    image: postgres:14.1
+    environment:
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - '54321:5432'
+
   redis:
     image: docker.io/bitnami/redis:6.2
     environment:
