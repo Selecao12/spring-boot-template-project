@@ -4,9 +4,13 @@ services:
   postgres:
     image: postgres:14.1
     environment:
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: template
     ports:
       - '54321:5432'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   redis:
     image: docker.io/bitnami/redis:6.2

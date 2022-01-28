@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd">
+
+    <changeSet id="1" author="nikitinvs" dbms="postgresql">
+        <createTable tableName="user">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="role">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="user_role">
+            <column name="user_id" type="bigint"/>
+            <column name="role_id" type="bigint"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="nikitinvs" dbms="postgresql">
+        <addPrimaryKey
+                columnNames="user_id, role_id"
+                constraintName="pk_user_role"
+                tableName="user_role"
+        />
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role__user"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user"
+                                 validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_role"
+                                 constraintName="fk_user_role__role"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="id"
+                                 referencedTableName="role"
+                                 validate="true"/>
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="user_role"
+                                      constraintName="fk_user_role__user"/>
+            <dropForeignKeyConstraint baseTableName="user_role"
+                                      constraintName="fk_user_role__role"/>
+            <dropPrimaryKey constraintName="pk_user_role"
+                            dropIndex="true"
+                            tableName="user_role"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="3" author="nikitinvs" dbms="postgresql">
+        <insert tableName="user">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$XPjM5FTZNHbxNU7Gk61YSu6mLvRw5oOxu5NS0IhqvbnvqnelQ5.Re"/> <!--admin-->
+            <column name="enabled" value="true" type="boolean"/>
+        </insert>
+        <insert tableName="user">
+            <column name="username" value="user"/>
+            <column name="password"
+                    value="$2a$10$rhKeHvUMbMspBIa1nY2AR.JzS2dPPPKy6qF/proVYGJnoE4rccGR6"/> <!-- 12345678 -->
+            <column name="enabled" value="true" type="boolean"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="admin"/>
+        </insert>
+        <insert tableName="role">
+            <column name="name" value="user"/>
+        </insert>
+        <rollback>
+            <delete tableName="role">
+                <where>1=1</where>
+            </delete>
+            <delete tableName="user">
+                <where>1=1</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
