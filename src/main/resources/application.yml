@@ -12,3 +12,6 @@ logging:
         security:
           web:
             FilterChainProxy: DEBUG
+
+redis:
+  singleAddress: redis://localhost:6379

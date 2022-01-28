@@ -1,4 +1,4 @@
-package com.example.template.entity;
+package com.example.template.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;

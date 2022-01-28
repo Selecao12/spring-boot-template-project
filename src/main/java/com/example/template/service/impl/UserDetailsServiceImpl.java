@@ -1,6 +1,6 @@
 package com.example.template.service.impl;
 
-import com.example.template.entity.User;
+import com.example.template.model.entity.User;
 import com.example.template.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

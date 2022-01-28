@@ -1,7 +1,7 @@
 package com.example.template.service.impl;
 
 
-import com.example.template.entity.User;
+import com.example.template.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
